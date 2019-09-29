@@ -1,4 +1,3 @@
 .vscode
 data/test/
-output*
 max_flow.out
