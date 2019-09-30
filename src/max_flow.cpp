@@ -101,8 +101,6 @@ int main()
     std::cin >> n_vertex >> n_edges;
 
     std::vector<std::vector<int>> graph(n_vertex, std::vector<int>(n_vertex));
-    std::vector<bool> source_reachable(n_vertex);
-    std::vector<bool> S_set(n_vertex);
 
     for (int i = 0; i < n_edges; i++)
     {
@@ -113,17 +111,17 @@ int main()
         graph[target][source] = weight;
     }
 
+    std::vector<bool> source_reachable(n_vertex);
+    std::vector<bool> S_set(n_vertex);
+
     int min_cut = INT_MAX;
-    for (int i = 0; i < n_vertex; i++)
+    for (int target = 1; target < n_vertex; target++)
     {
-        for (int j = i + 1; j < n_vertex; j++)
+        int cur_flow = Edmonds_Karp(graph, 0, target, &source_reachable, n_vertex, min_cut);
+        if (cur_flow < min_cut)
         {
-            int cur_flow = Edmonds_Karp(graph, i, j, &source_reachable, n_vertex, min_cut);
-            if (cur_flow < min_cut)
-            {
-                S_set = source_reachable;
-                min_cut = cur_flow;
-            }
+            S_set = source_reachable;
+            min_cut = cur_flow;
         }
     }
 
